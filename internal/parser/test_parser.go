@@ -76,10 +76,7 @@ func ParseTestJSON(r io.Reader) (map[string]*model.TestPackage, error) {
 		key := event.Package + "::" + event.Test
 
 		if _, ok := packages[event.Package]; !ok {
-			packages[event.Package] = &model.TestPackage{
-				Path:  event.Package,
-				Tests: make([]*model.Test, 0),
-			}
+			packages[event.Package] = model.NewTestPackage(event.Package)
 		}
 
 		if event.Output != "" {
@@ -110,7 +107,7 @@ func ParseTestJSON(r io.Reader) (map[string]*model.TestPackage, error) {
 				t.Output = outputBuilder.String()
 			}
 
-			packages[event.Package].Tests = append(packages[event.Package].Tests, t)
+			packages[event.Package].InsertTest(t)
 		}
 	}
 
