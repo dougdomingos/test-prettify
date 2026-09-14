@@ -1,14 +1,14 @@
 {{define "header"}}
 <header class="header">
-  <div class="header-left">
-    <h1 class="header-title">{{.Data.ProjectName}}</h1>
-    <span class="header-divider">|</span>
-    <span class="header-subtitle">Test & Coverage Report</span>
-    <span class="header-timestamp">{{.Data.Timestamp}}</span>
+  <div class="header__left">
+    <h1 class="header__title">{{.Data.ProjectName}}</h1>
+    <span class="header__divider">|</span>
+    <span class="header__subtitle">Test & Coverage Report</span>
+    <span class="header__timestamp">{{.Data.Timestamp}}</span>
   </div>
-  <nav class="header-nav">
-    <a href="tests.html">Tests</a>
-    <a href="coverage.html">Coverage</a>
+  <nav class="header__nav">
+    <a href="tests.html" class="header__link">Tests</a>
+    <a href="coverage.html" class="header__link">Coverage</a>
   </nav>
 </header>
 {{end}}

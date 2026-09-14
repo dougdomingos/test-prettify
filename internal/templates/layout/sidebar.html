@@ -1,46 +1,46 @@
 {{define "sidebar"}}
 <aside class="sidebar">
-  <div class="sidebar-top">
-    <div class="sidebar-section">
-      <h2 class="sidebar-title">Tests</h2>
-      <ul class="sidebar-list">
+  <div class="sidebar__top">
+    <div class="sidebar__section">
+      <h2 class="sidebar__title">Tests</h2>
+      <ul class="sidebar__list">
         {{range .Data.Sidebar.TestEntries}}
-        <li class="sidebar-item">
-          <a href="#pkg-{{.Name}}" class="sidebar-item-label">
-            <span class="status-dot {{if .Success}}success{{else}}danger{{end}}"></span>{{.Name}}
+        <li class="sidebar__item">
+          <a href="#pkg-{{.Name}}" class="sidebar__label">
+            <span class="status-dot {{if .Success}}status-dot--success{{else}}status-dot--danger{{end}}"></span>{{.Name}}
           </a>
-          <span class="sidebar-item-value">{{.Value}}</span>
+          <span class="sidebar__value">{{.Value}}</span>
         </li>
         {{end}}
       </ul>
     </div>
 
-    <div class="sidebar-section">
-      <h2 class="sidebar-title">Coverage</h2>
-      <ul class="sidebar-list">
+    <div class="sidebar__section">
+      <h2 class="sidebar__title">Coverage</h2>
+      <ul class="sidebar__list">
         {{range .Data.Sidebar.CoverageEntries}}
-        <li class="sidebar-item">
-          <span class="sidebar-item-label">
-            <span class="status-dot {{if .Success}}success{{else}}danger{{end}}"></span>{{.Name}}
+        <li class="sidebar__item">
+          <span class="sidebar__label">
+            <span class="status-dot {{if .Success}}status-dot--success{{else}}status-dot--danger{{end}}"></span>{{.Name}}
           </span>
-          <span class="sidebar-item-value">{{.Value}}</span>
+          <span class="sidebar__value">{{.Value}}</span>
         </li>
         {{end}}
       </ul>
     </div>
   </div>
 
-  <div class="sidebar-footer">
-    <div class="sidebar-footer-row">
+  <div class="sidebar__footer">
+    <div class="sidebar__footer-row">
       <span>Total time</span>
-      <span class="value">{{.Data.Sidebar.TotalTime}}</span>
+      <span class="sidebar__footer-value">{{.Data.Sidebar.TotalTime}}</span>
     </div>
     <div>
-      <div class="sidebar-footer-row">
+      <div class="sidebar__footer-row">
         <span>{{.Data.Sidebar.GlobalCoverage}}% coverage</span>
       </div>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" style="width: {{.Data.Sidebar.GlobalCoverage}}%;"></div>
+      <div class="progress-bar__bg">
+        <div class="progress-bar__fill" style="width: {{.Data.Sidebar.GlobalCoverage}}%;"></div>
       </div>
     </div>
   </div>

@@ -31,12 +31,31 @@ body {
     overflow: hidden;
 }
 
+/* ============================================================================
+ * App layout block
+============================================================================ */
 .app-layout {
     display: flex;
     flex-direction: column;
     height: 100vh;
 }
 
+.app-layout__body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.app-layout__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    background-color: var(--color-background);
+}
+
+/* ============================================================================
+* Header block
+============================================================================ */
 .header {
     display: flex;
     justify-content: space-between;
@@ -46,56 +65,53 @@ body {
     border-bottom: 1px solid var(--color-border-regular);
 }
 
-.header-left {
+.header__left {
     display: flex;
     align-items: center;
     gap: 0.75rem;
 }
 
-.header-title {
+.header__title {
     font-size: 1.125rem;
     font-weight: 600;
 }
 
-.header-divider {
+.header__divider {
     color: var(--color-text-faint);
 }
 
-.header-subtitle {
+.header__subtitle {
     color: var(--color-text-mute);
     font-size: 1.125rem;
 }
 
-.header-timestamp {
+.header__timestamp {
     font-family: var(--font-code);
     font-size: 0.75rem;
     color: var(--color-text-faint);
     margin-left: 0.5rem;
 }
 
-.header-nav {
+.header__nav {
     display: flex;
     gap: 1.5rem;
 }
 
-.header-nav a {
+.header__link {
     color: var(--color-text-mute);
     text-decoration: none;
     font-size: 0.875rem;
     font-weight: 500;
 }
 
-.header-nav a.active,
-.header-nav a:hover {
+.header__link--active,
+.header__link:hover {
     color: var(--color-text-regular);
 }
 
-.app-body {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-}
-
+/* ============================================================================
+ * Sidebar block
+============================================================================ */
 .sidebar {
     width: 260px;
     background-color: var(--color-background);
@@ -107,11 +123,16 @@ body {
     flex-shrink: 0;
 }
 
-.sidebar-section {
+.sidebar__top {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar__section {
     margin-bottom: 2rem;
 }
 
-.sidebar-title {
+.sidebar__title {
     font-size: 0.75rem;
     font-weight: 600;
     color: var(--color-text-mute);
@@ -120,21 +141,21 @@ body {
     margin-bottom: 1rem;
 }
 
-.sidebar-list {
+.sidebar__list {
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
 
-.sidebar-item {
+.sidebar__item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 0.875rem;
 }
 
-.sidebar-item-label {
+.sidebar__label {
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -142,28 +163,13 @@ body {
     text-decoration: none;
 }
 
-.status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.status-dot.success {
-    background-color: var(--color-success);
-}
-
-.status-dot.danger {
-    background-color: var(--color-danger);
-}
-
-.sidebar-item-value {
+.sidebar__value {
     font-family: var(--font-code);
     font-size: 0.75rem;
     color: var(--color-text-mute);
 }
 
-.sidebar-footer {
+.sidebar__footer {
     border-top: 1px solid var(--color-border-regular);
     padding-top: 1.5rem;
     display: flex;
@@ -171,7 +177,7 @@ body {
     gap: 1rem;
 }
 
-.sidebar-footer-row {
+.sidebar__footer-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -179,12 +185,33 @@ body {
     color: var(--color-text-mute);
 }
 
-.sidebar-footer-row .value {
+.sidebar__footer-value {
     font-family: var(--font-code);
     color: var(--color-text-regular);
 }
 
-.progress-bar-bg {
+/* ============================================================================
+ * Status dot block
+============================================================================ */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-dot--success {
+    background-color: var(--color-success);
+}
+
+.status-dot--danger {
+    background-color: var(--color-danger);
+}
+
+/* ============================================================================
+ * Progress bar block
+============================================================================ */
+.progress-bar__bg {
     width: 100%;
     height: 6px;
     background-color: var(--color-foreground);
@@ -193,25 +220,24 @@ body {
     margin-top: 0.5rem;
 }
 
-.progress-bar-fill {
+.progress-bar__fill {
     height: 100%;
     background-color: var(--color-success);
     border-radius: 3px;
 }
 
-.app-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 2rem;
-    background-color: var(--color-background);
-}
-
+/* ============================================================================
+ * Page titles
+============================================================================ */
 .page-title {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
 }
 
+/* ============================================================================
+ * Overview grid block
+============================================================================ */
 .overview-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -219,6 +245,9 @@ body {
     margin-bottom: 2.5rem;
 }
 
+/* ============================================================================
+ * Card block
+============================================================================ */
 .card {
     background-color: var(--color-foreground);
     border: 1px solid var(--color-border-regular);
@@ -230,42 +259,61 @@ body {
     justify-content: center;
 }
 
-.card-value {
+.card__value {
     font-size: 2.25rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
 }
 
-.card-label {
+.card__value--success {
+    color: var(--color-success);
+}
+
+.card__value--danger {
+    color: var(--color-danger);
+}
+
+.card__value--warning {
+    color: var(--color-warning);
+}
+
+.card__label {
     font-size: 0.875rem;
     color: var(--color-text-mute);
     font-weight: 500;
 }
 
-.package-block {
+
+/* ============================================================================
+ * Package block
+============================================================================ */
+.package {
     margin-bottom: 2rem;
 }
 
-.package-header {
+.package__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
 }
 
-.package-title {
+.package__title {
     font-family: var(--font-code);
     font-size: 1.125rem;
     font-weight: 600;
 }
 
-.package-meta {
+.package__meta {
     font-size: 0.75rem;
     font-family: var(--font-code);
     color: var(--color-text-mute);
 }
 
-.test-item {
+/* ============================================================================
+ * Test block
+============================================================================ */
+.test {
     background-color: var(--color-foreground);
     border: 1px solid var(--color-border-regular);
     border-radius: 6px;
@@ -273,7 +321,7 @@ body {
     margin-bottom: 0.75rem;
 }
 
-.test-item-header {
+.test__header {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -281,10 +329,40 @@ body {
     list-style: none;
 }
 
-.test-item-header::-webkit-details-marker {
+.test__header::-webkit-details-marker {
     display: none;
 }
 
+.test__name {
+    font-family: var(--font-code);
+    font-size: 0.875rem;
+}
+
+.test__output {
+    margin-top: 0.75rem;
+    background-color: var(--color-foreground);
+    border: 1px solid var(--color-border-regular);
+    border-radius: 4px;
+    padding: 0.75rem;
+    font-family: var(--font-code);
+    font-size: 0.8125rem;
+    color: var(--color-text-mute);
+}
+
+.test__output--error {
+    background-color: rgba(248, 81, 73, 0.08);
+    border: 1px solid var(--color-danger);
+    color: var(--color-danger);
+}
+
+.test__row {
+    white-space: pre-wrap;
+    min-height: 1em;
+}
+
+/* ============================================================================
+ * Badge block
+============================================================================ */
 .badge {
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
@@ -294,45 +372,12 @@ body {
     text-transform: uppercase;
 }
 
-.badge-pass {
+.badge--pass {
     background-color: rgba(63, 185, 80, 0.15);
     color: var(--color-success);
 }
 
-.badge-fail {
+.badge--fail {
     background-color: rgba(248, 81, 73, 0.15);
     color: var(--color-danger);
 }
-
-.test-name {
-    font-family: var(--font-code);
-    font-size: 0.875rem;
-}
-
-.test-error-box {
-    margin-top: 0.75rem;
-    background-color: rgba(248, 81, 73, 0.08);
-    border: 1px solid var(--color-danger);
-    border-radius: 4px;
-    padding: 0.75rem;
-    font-family: var(--font-code);
-    font-size: 0.8125rem;
-    color: var(--color-danger);
-}
-
-.test-output-box {
-    margin-top: 0.75rem;
-    background-color: var(--color-foreground);
-    border: 1px solid var(--color-border-regular);
-    border-radius: 4px;
-    padding: 0.75rem;
-    font-family: var(--font-code);
-    font-size: 0.8125rem;
-    color: var(--color-text-mute);
-}
-
-.test-output-row {
-    white-space: pre-wrap;
-    min-height: 1em;
-}
-

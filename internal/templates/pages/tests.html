@@ -3,52 +3,46 @@
 
 <div class="overview-grid">
     <div class="card">
-        <div class="card-value">{{.Data.TestReport.Overview.TotalRunned}}</div>
-        <div class="card-label">Runned</div>
+        <div class="card__value">{{.Data.TestReport.Overview.TotalRunned}}</div>
+        <div class="card__label">Runned</div>
     </div>
     <div class="card">
-        <div class="card-value" style="color: var(--color-success)"
-            >{{.Data.TestReport.Overview.Passed}}</div
-        >
-        <div class="card-label">Passed</div>
+        <div class="card__value card__value--success">{{.Data.TestReport.Overview.Passed}}</div>
+        <div class="card__label">Passed</div>
     </div>
     <div class="card">
-        <div class="card-value" style="color: var(--color-danger)"
-            >{{.Data.TestReport.Overview.Failed}}</div
-        >
-        <div class="card-label">Failed</div>
+        <div class="card__value card__value--danger">{{.Data.TestReport.Overview.Failed}}</div>
+        <div class="card__label">Failed</div>
     </div>
     <div class="card">
-        <div class="card-value" style="color: var(--color-warning)"
-            >{{.Data.TestReport.Overview.Skipped}}</div
-        >
-        <div class="card-label">Skipped</div>
+        <div class="card__value card__value--warning">{{.Data.TestReport.Overview.Skipped}}</div>
+        <div class="card__label">Skipped</div>
     </div>
 </div>
 
 <h2 class="page-title">Tests by package</h2>
 
 {{range .Data.TestReport.Packages}}
-<div class="package-block" id="pkg-{{.Name}}">
-    <div class="package-header">
-        <h3 class="package-title">{{.Name}}</h3>
-        <span class="package-meta"
+<div class="package" id="pkg-{{.Name}}">
+    <div class="package__header">
+        <h3 class="package__title">{{.Name}}</h3>
+        <span class="package__meta"
             >{{.TestCount}} tests / {{.ElapsedTime}}</span
         >
     </div>
     {{range .Tests}}
-    <details class="test-item" {{if not .Passed}}open{{end}}>
-        <summary class="test-item-header">
+    <details class="test" {{if not .Passed}}open{{end}}>
+        <summary class="test__header">
             {{if .Passed}}
-            <span class="badge badge-pass">PASS</span>
+            <span class="badge badge--pass">PASS</span>
             {{else}}
-            <span class="badge badge-fail">FAIL</span>
+            <span class="badge badge--fail">FAIL</span>
             {{end}}
-            <span class="test-name">{{.Name}}</span>
+            <span class="test__name">{{.Name}}</span>
         </summary>
         {{if .Output}}
-        {{if .Passed}}<div class="test-output-box">{{else}}<div class="test-error-box">{{end}}
-            {{range splitLines .Output}}<div class="test-output-row">{{.}}</div>{{end}}
+        {{if .Passed}}<div class="test__output">{{else}}<div class="test__output test__output--error">{{end}}
+            {{range splitLines .Output}}<div class="test__row">{{.}}</div>{{end}}
         </div>
         {{end}}
     </details>

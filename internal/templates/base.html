@@ -11,9 +11,9 @@
   <body>
     <div class="app-layout">
       {{template "header" .}}
-      <div class="app-body">
+      <div class="app-layout__body">
         {{template "sidebar" .}}
-        <main class="app-content">
+        <main class="app-layout__content">
           {{block "content" .}}{{end}}
         </main>
       </div>
