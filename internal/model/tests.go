@@ -80,3 +80,59 @@ func (pkg *TestPackage) InsertTest(test *Test) {
 func (pkg *TestPackage) GetResultRate(resultType TestResult) float64 {
 	return float64(pkg.Metrics.Results[resultType] / pkg.Metrics.TotalTests)
 }
+
+// TestReportData packs all data required to render the tests page.
+type TestReportData struct {
+
+	// Overview holds the high-level summary cards.
+	Overview OverviewData
+
+	// Packages holds per-package data for the "Tests by package" section.
+	Packages []*PackageReport
+}
+
+// OverviewData holds the summary card values for the overview grid.
+type OverviewData struct {
+
+	// TotalRunned is the total number of executed tests.
+	TotalRunned uint
+
+	// Passed is the number of passed tests.
+	Passed uint
+
+	// Failed is the number of failed tests.
+	Failed uint
+
+	// Skipped is the number of skipped tests.
+	Skipped uint
+}
+
+// PackageReport holds the per-package data for the "Tests by package"
+// section.
+type PackageReport struct {
+
+	// Name is the short package name (e.g. "auth").
+	Name string
+
+	// TestCount is the number of tests in this package.
+	TestCount uint
+
+	// ElapsedTime is the package's execution time (e.g. "97ms").
+	ElapsedTime string
+
+	// Tests holds the individual test results within this package.
+	Tests []*TestReport
+}
+
+// TestReport holds the rendering data of a single test.
+type TestReport struct {
+
+	// Name is the test function name.
+	Name string
+
+	// Passed indicates whether the test passed (PASS/FAIL badge).
+	Passed bool
+
+	// Output holds error output (shown in test-error-box), empty if passed.
+	Output string
+}
