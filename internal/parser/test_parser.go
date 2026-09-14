@@ -93,6 +93,11 @@ func ParseTestJSON(r io.Reader) (map[string]*model.TestPackage, error) {
 		case "run":
 			tests[key] = &model.Test{Name: event.Test}
 		case "pass", "fail", "skip":
+			if event.Test == "" {
+				// package-level summary event; not a test result
+				break
+			}
+
 			if _, ok := tests[key]; !ok {
 				// ensures subtests, which don't emit a "run" event, are correctly
 				// registered
