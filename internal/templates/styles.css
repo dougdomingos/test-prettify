@@ -331,3 +331,8 @@ body {
     color: var(--color-text-mute);
 }
 
+.test-output-row {
+    white-space: pre-wrap;
+    min-height: 1em;
+}
+

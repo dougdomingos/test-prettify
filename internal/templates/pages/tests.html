@@ -47,11 +47,9 @@
             <span class="test-name">{{.Name}}</span>
         </summary>
         {{if .Output}}
-        {{if .Passed}}
-        <div class="test-output-box">{{.Output}}</div>
-        {{else}}
-        <div class="test-error-box">{{.Output}}</div>
-        {{end}}
+        {{if .Passed}}<div class="test-output-box">{{else}}<div class="test-error-box">{{end}}
+            {{range splitLines .Output}}<div class="test-output-row">{{.}}</div>{{end}}
+        </div>
         {{end}}
     </details>
     {{end}}

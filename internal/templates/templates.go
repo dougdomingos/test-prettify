@@ -35,6 +35,21 @@ func NewPageRenderer() (*PageRenderer, error) {
 	return &PageRenderer{css: template.CSS(raw)}, nil
 }
 
+// splitLines splits output into individual rows, dropping the trailing empty
+// element produced by a final newline while keeping interior blank lines.
+func splitLines(s string) []string {
+	if s == "" {
+		return nil
+	}
+
+	lines := strings.Split(s, "\n")
+	if lines[len(lines)-1] == "" {
+		lines = lines[:len(lines)-1]
+	}
+
+	return lines
+}
+
 // ListPages returns the names of all available page templates, without extension.
 func ListPages() ([]string, error) {
 	entries, err := fs.ReadDir(files, "pages")
@@ -55,7 +70,9 @@ func ListPages() ([]string, error) {
 // Render executes the named page template and writes the output to w.
 // pageName must match a file under pages/ without the .html extension.
 func (r *PageRenderer) Render(w io.Writer, pageName string, data any) error {
-	tmpl, err := template.ParseFS(files,
+	tmpl, err := template.New(pageName).Funcs(template.FuncMap{
+		"splitLines": splitLines,
+	}).ParseFS(files,
 		"base.html",
 		"layout/header.html",
 		"layout/sidebar.html",
