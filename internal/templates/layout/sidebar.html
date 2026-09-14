@@ -1,0 +1,48 @@
+{{define "sidebar"}}
+<aside class="sidebar">
+  <div class="sidebar-top">
+    <div class="sidebar-section">
+      <h2 class="sidebar-title">Tests</h2>
+      <ul class="sidebar-list">
+        {{range .Data.Sidebar.TestEntries}}
+        <li class="sidebar-item">
+          <a href="#pkg-{{.Name}}" class="sidebar-item-label">
+            <span class="status-dot {{if .Success}}success{{else}}danger{{end}}"></span>{{.Name}}
+          </a>
+          <span class="sidebar-item-value">{{.Value}}</span>
+        </li>
+        {{end}}
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <h2 class="sidebar-title">Coverage</h2>
+      <ul class="sidebar-list">
+        {{range .Data.Sidebar.CoverageEntries}}
+        <li class="sidebar-item">
+          <span class="sidebar-item-label">
+            <span class="status-dot {{if .Success}}success{{else}}danger{{end}}"></span>{{.Name}}
+          </span>
+          <span class="sidebar-item-value">{{.Value}}</span>
+        </li>
+        {{end}}
+      </ul>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-row">
+      <span>Total time</span>
+      <span class="value">{{.Data.Sidebar.TotalTime}}</span>
+    </div>
+    <div>
+      <div class="sidebar-footer-row">
+        <span>{{.Data.Sidebar.GlobalCoverage}}% coverage</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" style="width: {{.Data.Sidebar.GlobalCoverage}}%;"></div>
+      </div>
+    </div>
+  </div>
+</aside>
+{{end}}

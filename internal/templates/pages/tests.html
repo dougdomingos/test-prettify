@@ -1,0 +1,59 @@
+{{define "title"}}Test Report{{end}} {{define "content"}}
+<h2 class="page-title">Overview</h2>
+
+<div class="overview-grid">
+    <div class="card">
+        <div class="card-value">{{.Data.TestReport.Overview.TotalRunned}}</div>
+        <div class="card-label">Runned</div>
+    </div>
+    <div class="card">
+        <div class="card-value" style="color: var(--color-success)"
+            >{{.Data.TestReport.Overview.Passed}}</div
+        >
+        <div class="card-label">Passed</div>
+    </div>
+    <div class="card">
+        <div class="card-value" style="color: var(--color-danger)"
+            >{{.Data.TestReport.Overview.Failed}}</div
+        >
+        <div class="card-label">Failed</div>
+    </div>
+    <div class="card">
+        <div class="card-value" style="color: var(--color-warning)"
+            >{{.Data.TestReport.Overview.Skipped}}</div
+        >
+        <div class="card-label">Skipped</div>
+    </div>
+</div>
+
+<h2 class="page-title">Tests by package</h2>
+
+{{range .Data.TestReport.Packages}}
+<div class="package-block" id="pkg-{{.Name}}">
+    <div class="package-header">
+        <h3 class="package-title">{{.Name}}</h3>
+        <span class="package-meta"
+            >{{.TestCount}} tests / {{.ElapsedTime}}</span
+        >
+    </div>
+    {{range .Tests}}
+    <details class="test-item" {{if not .Passed}}open{{end}}>
+        <summary class="test-item-header">
+            {{if .Passed}}
+            <span class="badge badge-pass">PASS</span>
+            {{else}}
+            <span class="badge badge-fail">FAIL</span>
+            {{end}}
+            <span class="test-name">{{.Name}}</span>
+        </summary>
+        {{if .Output}}
+        {{if .Passed}}
+        <div class="test-output-box">{{.Output}}</div>
+        {{else}}
+        <div class="test-error-box">{{.Output}}</div>
+        {{end}}
+        {{end}}
+    </details>
+    {{end}}
+</div>
+{{end}} {{end}}
