@@ -2,8 +2,11 @@ package cli
 
 import (
 	"fmt"
+	"os"
 	"time"
 
+	"github.com/dougdomingos/test-prettify/internal/coverage"
+	"github.com/dougdomingos/test-prettify/internal/model"
 	"github.com/dougdomingos/test-prettify/internal/parser"
 	"github.com/dougdomingos/test-prettify/internal/report"
 	"github.com/dougdomingos/test-prettify/internal/templates"
@@ -55,6 +58,15 @@ func NewRootCmd() *cobra.Command {
 			data.ProjectName = "Project Name"
 			data.Timestamp = time.Now().Format("2006-01-02 15:04:05")
 
+			if opts.coverageSrc != "" {
+				cov, err := loadCoverage(opts)
+				if err != nil {
+					return err
+				}
+				
+				report.ApplyCoverage(data, cov)
+			}
+
 			fmt.Println("Generating HTML reports...")
 			if err := r.GenerateReports(opts.outputDir, data); err != nil {
 				return err
@@ -65,8 +77,29 @@ func NewRootCmd() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.outputDir, "output-dir", "o", opts.outputDir, "Output directory for HTML reports")
+	setCmdFlags(cmd, &opts)
 	return cmd
+}
+
+// loadCoverage parses the coverage profile and renders the coverage report.
+func loadCoverage(opts options) (*model.CoverageReportData, error) {
+	f, err := os.Open(opts.coverageSrc)
+	if err != nil {
+		return nil, fmt.Errorf("opening coverage profile: %w", err)
+	}
+	defer f.Close()
+
+	profile, err := parser.ParseCoverageProfile(f)
+	if err != nil {
+		return nil, fmt.Errorf("parsing coverage profile: %w", err)
+	}
+
+	cov, err := coverage.RenderProfile(profile, coverage.RenderOptions{RootModule: opts.coverageRoot})
+	if err != nil {
+		return nil, fmt.Errorf("rendering coverage report: %w", err)
+	}
+
+	return cov, nil
 }
 
 // Execute runs the CLI application.
