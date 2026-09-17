@@ -88,6 +88,27 @@ func BuildReport(packages map[string]*model.TestPackage) *model.ReportData {
 	return data
 }
 
+// ApplyCoverage merges a rendered coverage report into the shared report
+// data, populating the sidebar coverage entries and global total.
+func ApplyCoverage(data *model.ReportData, cov *model.CoverageReportData) {
+	if cov == nil {
+		return
+	}
+
+	data.CoverageReport = *cov
+
+	entries := make([]model.SidebarEntry, 0, len(cov.Packages))
+	for _, pkg := range cov.Packages {
+		entries = append(entries, model.SidebarEntry{
+			Name:  pkg.Name,
+			Grade: model.CoverageGrade(pkg.Percent),
+			Value: coverageString(pkg.Percent),
+		})
+	}
+	data.Sidebar.CoverageEntries = entries
+	data.Sidebar.GlobalCoverage = cov.Overview.GlobalPercent
+}
+
 // shortName returns the last segment of a package path, falling back to the
 // full path when the base is not a usable name.
 func shortName(pkgPath string) string {
@@ -105,4 +126,9 @@ func shortName(pkgPath string) string {
 // ratioString renders the passed count over the total (ex: "10/10").
 func ratioString(passed float64, total uint) string {
 	return fmt.Sprintf("%d/%d", uint(passed), total)
+}
+
+// coverageString renders a coverage percentage with one decimal (ex: "93.2%").
+func coverageString(percent float64) string {
+	return fmt.Sprintf("%.1f%%", percent)
 }
