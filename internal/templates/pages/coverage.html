@@ -1,0 +1,86 @@
+{{define "title"}}Coverage Report{{end}} {{define "content"}}
+<h2 class="page-title">Coverage by Test Package</h2>
+
+{{if not .Data.CoverageReport.Overview.TotalStmts}}
+<div class="coverage-empty">
+  <p class="coverage-empty__title">No coverage data</p>
+  <p class="coverage-empty__hint">Re-run with <code>--coverage-profile coverage.out</code> to generate a coverage report.</p>
+</div>
+{{else}}
+
+<div class="overview-grid overview-grid--coverage">
+  <div class="card">
+    <div class="card__value">{{printf "%.1f" .Data.CoverageReport.Overview.GlobalPercent}}<span class="card__unit">%</span></div>
+    <div class="card__label">Global Coverage</div>
+  </div>
+  <div class="card card--files">
+    <div class="card__label">Lowest Coverage</div>
+    <ul class="card__list">
+      {{range .Data.CoverageReport.Overview.WeakestFiles}}
+      <li class="card__list-item">
+        <a class="card__file-link" href="#{{fileID .Path}}">
+          <span class="status-dot status-dot--{{gradeClass .Percent}}"></span>
+          <span class="card__file">{{.Path}}</span>
+          <span class="card__file-pct">({{printf "%.1f" .Percent}}%)</span>
+        </a>
+      </li>
+      {{end}}
+    </ul>
+  </div>
+</div>
+
+{{range .Data.CoverageReport.Packages}}
+<div class="coverage-package" id="pkg-{{.Name}}">
+  <div class="coverage-package__header">
+    <h3 class="coverage-package__title">{{.Name}}</h3>
+    <span class="coverage-package__meta">{{printf "%.1f" .Percent}}% coverage</span>
+  </div>
+
+  {{range .Files}}
+  <details class="file-card" id="{{fileID .Path}}">
+    <summary class="file-card__header">
+      {{if .Unavailable}}
+      <span class="file-card__bullet status-dot status-dot--muted"></span>
+      {{else}}
+      <span class="file-card__bullet status-dot status-dot--{{gradeClass .Percent}}"></span>
+      {{end}}
+      <span class="file-card__path">{{.Path}}</span>
+      {{if .Unavailable}}
+      <span class="file-card__meta file-card__meta--muted">source unavailable</span>
+      {{else}}
+      <span class="file-card__meta file-card__meta--{{gradeClass .Percent}}">{{printf "%.1f" .Percent}}% coverage</span>
+      {{end}}
+    </summary>
+
+    <div class="src-view">
+      {{if .Unavailable}}
+      <div class="src-view__notice">The source file could not be found on disk, so its code cannot be rendered.</div>
+      {{else}}
+      {{range .Lines}}
+      <div class="src-view__row src-view__row--{{statusClass .Status}}">
+        <span class="src-view__gutter" data-line="{{.LineNum}}">{{.LineNum}}</span>
+        <span class="src-view__code">{{.HTML}}</span>
+      </div>
+      {{end}}
+      {{end}}
+    </div>
+  </details>
+  {{end}}
+</div>
+{{end}}
+
+<script>
+(function () {
+  function openFromHash() {
+    var id = (location.hash || "").slice(1);
+    var el = id && document.getElementById(id);
+    if (el && el.tagName === "DETAILS") {
+      el.open = true;
+    }
+  }
+  window.addEventListener("hashchange", openFromHash);
+  openFromHash();
+})();
+</script>
+
+{{end}} {{end}}

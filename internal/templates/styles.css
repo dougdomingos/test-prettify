@@ -10,6 +10,8 @@
     --color-danger: #f85149;
     --color-warning: #d29922;
 
+    --color-accent: #58a6ff;
+
     /* Fonts */
     --font-text: "Roboto", system-ui, sans-serif;
     --font-code: "Consolas", monospace;
@@ -208,6 +210,14 @@ body {
     background-color: var(--color-danger);
 }
 
+.status-dot--warning {
+    background-color: var(--color-warning);
+}
+
+.status-dot--muted {
+    background-color: var(--color-text-faint);
+}
+
 /* ============================================================================
  * Progress bar block
 ============================================================================ */
@@ -380,4 +390,261 @@ body {
 .badge--fail {
     background-color: rgba(248, 81, 73, 0.15);
     color: var(--color-danger);
+}
+
+.card__file-pct {
+    font-family: var(--font-code);
+    font-size: 0.8125rem;
+    color: var(--color-text-mute);
+}
+
+/* Lowest coverage card block */
+.card--files .card__label {
+    margin-bottom: 1rem;
+}
+
+.card__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.card__list-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.8125rem;
+}
+
+.card__file {
+    font-family: var(--font-code);
+    color: var(--color-text-regular);
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.card__file-link {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    min-width: 0;
+    text-decoration: none;
+}
+
+.card__file-link:hover .card__file {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+/* ============================================================================
+ * Coverage page block
+============================================================================ */
+.overview-grid--coverage {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.card__unit {
+    font-size: 1.25rem;
+    color: var(--color-text-mute);
+}
+
+.coverage-package {
+    margin-bottom: 2rem;
+}
+
+.coverage-package__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.coverage-package__title {
+    font-family: var(--font-code);
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.coverage-package__meta {
+    font-size: 0.875rem;
+    font-family: var(--font-code);
+    color: var(--color-text-mute);
+}
+
+/* ============================================================================
+ * File coverage card block
+============================================================================ */
+.file-card {
+    background-color: var(--color-foreground);
+    border: 1px solid var(--color-border-regular);
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+}
+
+.file-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1.25rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+
+.file-card__header::-webkit-details-marker {
+    display: none;
+}
+
+.file-card__bullet {
+    flex-shrink: 0;
+}
+
+.file-card__path {
+    font-family: var(--font-code);
+    font-size: 0.875rem;
+    color: var(--color-text-regular);
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.file-card__meta {
+    font-family: var(--font-code);
+    font-size: 0.8125rem;
+    flex-shrink: 0;
+}
+
+.file-card__meta--success {
+    color: var(--color-success);
+}
+
+.file-card__meta--warning {
+    color: var(--color-warning);
+}
+
+.file-card__meta--danger {
+    color: var(--color-danger);
+}
+
+.file-card__meta--muted {
+    color: var(--color-text-faint);
+}
+
+/* ============================================================================
+ * Source viewer block
+============================================================================ */
+.src-view {
+    border-top: 1px solid var(--color-border-regular);
+    background-color: var(--color-background);
+    overflow-x: auto;
+}
+
+.src-view__row {
+    display: flex;
+    align-items: stretch;
+    min-height: 1.625rem;
+}
+
+.src-view__gutter {
+    flex-shrink: 0;
+    width: 3.5rem;
+    padding: 0 0.75rem 0 1rem;
+    text-align: right;
+    font-family: var(--font-code);
+    font-size: 0.8125rem;
+    line-height: 1.625rem;
+    color: var(--color-text-faint);
+    border-right: 1px solid var(--color-border-regular);
+    background-color: rgba(22, 27, 34, 0.6);
+    user-select: none;
+}
+
+.src-view__code {
+    flex: 1;
+    padding: 0 1rem;
+    font-family: var(--font-code);
+    font-size: 0.8125rem;
+    line-height: 1.625rem;
+    white-space: pre;
+    tab-size: 4;
+    min-width: 0;
+}
+
+.src-view__row--covered {
+    background-color: rgba(63, 185, 80, 0.12);
+}
+
+.src-view__row--covered .src-view__gutter {
+    background-color: rgba(63, 185, 80, 0.2);
+    color: var(--color-success);
+}
+
+.src-view__row--uncovered {
+    background-color: rgba(248, 81, 73, 0.12);
+}
+
+.src-view__row--uncovered .src-view__gutter {
+    background-color: rgba(248, 81, 73, 0.2);
+    color: var(--color-danger);
+}
+
+.src-view__row--mixed .src-view__gutter {
+    color: var(--color-warning);
+    background: var(--color-border-regular);
+}
+
+.src-view__row--mixed .src-view__code {
+    background: var(--color-foreground);
+}
+
+.src-view__row--neutral .src-view__code {
+    color: var(--color-text-faint);
+}
+
+.src-view__code .cov {
+    background-color: rgba(63, 185, 80, 0.35);
+    color: var(--color-text-regular);
+}
+
+.src-view__code .uncov {
+    background-color: rgba(248, 81, 73, 0.35);
+    color: var(--color-text-regular);
+}
+
+.src-view__notice {
+    padding: 1.25rem;
+    font-size: 0.875rem;
+    color: var(--color-text-mute);
+}
+
+/* ============================================================================
+ * Coverage empty state block
+============================================================================ */
+.coverage-empty {
+    background-color: var(--color-foreground);
+    border: 1px dashed var(--color-border-regular);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.coverage-empty__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.coverage-empty__hint {
+    font-size: 0.875rem;
+    color: var(--color-text-mute);
+}
+
+.coverage-empty__hint code {
+    font-family: var(--font-code);
+    color: var(--color-text-regular);
 }

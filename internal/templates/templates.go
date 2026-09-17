@@ -7,6 +7,9 @@ import (
 	"io/fs"
 	"path/filepath"
 	"strings"
+	"unicode"
+
+	"github.com/dougdomingos/test-prettify/internal/model"
 )
 
 //go:embed base.html layout/*.html pages/*.html styles.css
@@ -31,7 +34,7 @@ func NewPageRenderer() (*PageRenderer, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return &PageRenderer{css: template.CSS(raw)}, nil
 }
 
@@ -56,22 +59,59 @@ func ListPages() ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	names := make([]string, 0, len(entries))
 	for _, entry := range entries {
 		if !entry.IsDir() && filepath.Ext(entry.Name()) == ".html" {
 			names = append(names, strings.TrimSuffix(entry.Name(), ".html"))
 		}
 	}
-	
+
 	return names, nil
+}
+
+// statusClass maps a source line status to its CSS modifier class.
+func statusClass(status model.LineStatus) string {
+	switch status {
+	case model.LineCovered:
+		return "covered"
+	case model.LineUncovered:
+		return "uncovered"
+	case model.LineMixed:
+		return "mixed"
+	default:
+		return "neutral"
+	}
+}
+
+// gradeClass maps a coverage percentage to its indicator color class.
+func gradeClass(percent float64) string {
+	return model.CoverageGrade(percent)
+}
+
+// fileID derives a stable, URL-safe anchor id from a module-relative file path
+// so overview links can jump to the matching coverage file card.
+func fileID(path string) string {
+	var b strings.Builder
+	b.WriteString("file-")
+	for _, r := range path {
+		if unicode.IsLetter(r) || unicode.IsDigit(r) {
+			b.WriteRune(unicode.ToLower(r))
+		} else {
+			b.WriteByte('-')
+		}
+	}
+	return b.String()
 }
 
 // Render executes the named page template and writes the output to w.
 // pageName must match a file under pages/ without the .html extension.
 func (r *PageRenderer) Render(w io.Writer, pageName string, data any) error {
 	tmpl, err := template.New(pageName).Funcs(template.FuncMap{
-		"splitLines": splitLines,
+		"splitLines":  splitLines,
+		"statusClass": statusClass,
+		"gradeClass":  gradeClass,
+		"fileID":      fileID,
 	}).ParseFS(files,
 		"base.html",
 		"layout/header.html",
@@ -82,7 +122,7 @@ func (r *PageRenderer) Render(w io.Writer, pageName string, data any) error {
 	if err != nil {
 		return err
 	}
-	
+
 	return tmpl.ExecuteTemplate(w, "base.html", templateData{
 		CSS:  r.css,
 		Data: data,

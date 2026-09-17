@@ -6,7 +6,7 @@
       <ul class="sidebar__list">
         {{range .Data.Sidebar.TestEntries}}
         <li class="sidebar__item">
-          <a href="#pkg-{{.Name}}" class="sidebar__label">
+          <a href="tests.html#pkg-{{.Name}}" class="sidebar__label">
             <span class="status-dot {{if .Success}}status-dot--success{{else}}status-dot--danger{{end}}"></span>{{.Name}}
           </a>
           <span class="sidebar__value">{{.Value}}</span>
@@ -20,9 +20,9 @@
       <ul class="sidebar__list">
         {{range .Data.Sidebar.CoverageEntries}}
         <li class="sidebar__item">
-          <span class="sidebar__label">
-            <span class="status-dot {{if .Success}}status-dot--success{{else}}status-dot--danger{{end}}"></span>{{.Name}}
-          </span>
+          <a href="coverage.html#pkg-{{.Name}}" class="sidebar__label">
+            <span class="status-dot status-dot--{{.Grade}}"></span>{{.Name}}
+          </a>
           <span class="sidebar__value">{{.Value}}</span>
         </li>
         {{end}}
@@ -37,10 +37,10 @@
     </div>
     <div>
       <div class="sidebar__footer-row">
-        <span>{{.Data.Sidebar.GlobalCoverage}}% coverage</span>
+        <span>{{printf "%.1f" .Data.Sidebar.GlobalCoverage}}% coverage</span>
       </div>
       <div class="progress-bar__bg">
-        <div class="progress-bar__fill" style="width: {{.Data.Sidebar.GlobalCoverage}}%;"></div>
+        <div class="progress-bar__fill" style="width: {{printf "%.1f" .Data.Sidebar.GlobalCoverage}}%;"></div>
       </div>
     </div>
   </div>
