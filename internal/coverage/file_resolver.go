@@ -1,7 +1,7 @@
 package coverage
 
 import (
-	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -32,9 +32,9 @@ func NewSrcResolver(dir string) (*SrcResolver, error) {
 		return nil, err
 	}
 
-	modulePath, modDir, err := findModule(abs)
+	modulePath, modDir, err := modutil.FindModule(abs)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("go.mod not found: %w: run from the module root or pass an explicit --coverage-root", err)
 	}
 
 	return &SrcResolver{modulePath: modulePath, rootDir: modDir}, nil
@@ -71,26 +71,4 @@ func (r *SrcResolver) GetRelPath(profilePath string) string {
 	}
 
 	return strings.Trim(rest, "/")
-}
-
-// findModule walks up from dir looking for a go.mod file and returns the
-// module import path declared in it together with the directory that holds
-// the file.
-func findModule(dir string) (string, string, error) {
-	for {
-		info, err := os.Stat(filepath.Join(dir, "go.mod"))
-		if err == nil && !info.IsDir() {
-			modulePath, err := modutil.ReadModulePath(filepath.Join(dir, "go.mod"))
-			if err != nil {
-				return "", "", err
-			}
-			return modulePath, dir, nil
-		}
-
-		parent := filepath.Dir(dir)
-		if parent == dir {
-			return "", "", errors.New("go.mod not found: run from the module root or pass an explicit --coverage-root")
-		}
-		dir = parent
-	}
 }

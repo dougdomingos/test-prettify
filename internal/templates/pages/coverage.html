@@ -16,7 +16,7 @@
   <div class="card card--files">
     <div class="card__label">Lowest Coverage</div>
     <ul class="card__list">
-      {{range .Data.CoverageReport.Overview.WeakestFiles}}
+      {{range .Data.CoverageReport.Overview.LowestRate}}
       <li class="card__list-item">
         <a class="card__file-link" href="#{{fileID .Path}}">
           <span class="status-dot status-dot--{{gradeClass .Percent}}"></span>

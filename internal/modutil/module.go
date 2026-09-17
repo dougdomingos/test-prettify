@@ -3,6 +3,7 @@ package modutil
 import (
 	"errors"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -31,6 +32,28 @@ func ReadModulePath(path string) (string, error) {
 	return "", errors.New("go.mod is missing a module directive")
 }
 
+// FindModule walks up from dir looking for a go.mod file and returns the
+// module import path declared in it together with the directory that holds
+// the file.
+func FindModule(dir string) (string, string, error) {
+	for {
+		info, err := os.Stat(filepath.Join(dir, "go.mod"))
+		if err == nil && !info.IsDir() {
+			modulePath, err := ReadModulePath(filepath.Join(dir, "go.mod"))
+			if err != nil {
+				return "", "", err
+			}
+			return modulePath, dir, nil
+		}
+
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			return "", "", errors.New("go.mod not found")
+		}
+		dir = parent
+	}
+}
+
 // ProjectName walks up from the current directory looking for a go.mod file,
 // reads the module path, and returns its last segment as the project name.
 func ProjectName() (string, error) {
@@ -39,24 +62,10 @@ func ProjectName() (string, error) {
 		return "", err
 	}
 
-	for {
-		modPath := filepath.Join(dir, "go.mod")
-		if info, err := os.Stat(modPath); err == nil && !info.IsDir() {
-			module, err := ReadModulePath(modPath)
-			if err != nil {
-				return "", err
-			}
-
-			if i := strings.LastIndex(module, "/"); i >= 0 {
-				return module[i+1:], nil
-			}
-			return module, nil
-		}
-
-		parent := filepath.Dir(dir)
-		if parent == dir {
-			return "", errors.New("go.mod not found")
-		}
-		dir = parent
+	module, _, err := FindModule(dir)
+	if err != nil {
+		return "", err
 	}
+
+	return path.Base(module), nil
 }
