@@ -16,6 +16,9 @@ type ReportData struct {
 
 	// TestReport packs the data required to render the tests page.
 	TestReport TestReportData
+
+	// CoverageReport packs the data required to render the coverage page.
+	CoverageReport CoverageReportData
 }
 
 // SidebarData holds the data to render the sidebar (tests + coverage
@@ -45,7 +48,10 @@ type SidebarEntry struct {
 	// Success marks the status dot color (true = green, false = red).
 	Success bool
 
+	// Grade is the coverage indicator color ("success", "warning" or
+	// "danger"), set on coverage entries.
+	Grade string
+
 	// Value is the displayed value (e.g. "10/10" or "93.2%").
 	Value string
 }
-
