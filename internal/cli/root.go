@@ -54,8 +54,10 @@ func NewRootCmd() *cobra.Command {
 				return err
 			}
 
-			data := report.BuildReport(packages)
-			data.ProjectName = "Project Name"
+			data, err := report.BuildReport(packages)
+			if err != nil {
+				return err
+			}
 			data.Timestamp = time.Now().Format("2006-01-02 15:04:05")
 
 			if opts.coverageSrc != "" {
@@ -63,7 +65,7 @@ func NewRootCmd() *cobra.Command {
 				if err != nil {
 					return err
 				}
-				
+
 				report.ApplyCoverage(data, cov)
 			}
 

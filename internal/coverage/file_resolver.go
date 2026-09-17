@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/dougdomingos/test-prettify/internal/modutil"
 )
 
 // SrcResolver maps source file import paths recorded in a coverage profile to
@@ -78,7 +80,7 @@ func findModule(dir string) (string, string, error) {
 	for {
 		info, err := os.Stat(filepath.Join(dir, "go.mod"))
 		if err == nil && !info.IsDir() {
-			modulePath, err := readModulePath(filepath.Join(dir, "go.mod"))
+			modulePath, err := modutil.ReadModulePath(filepath.Join(dir, "go.mod"))
 			if err != nil {
 				return "", "", err
 			}
@@ -91,28 +93,4 @@ func findModule(dir string) (string, string, error) {
 		}
 		dir = parent
 	}
-}
-
-// readModulePath extracts the module path from the "module" directive of a
-// go.mod file.
-func readModulePath(path string) (string, error) {
-	raw, err := os.ReadFile(path)
-	if err != nil {
-		return "", err
-	}
-
-	for line := range strings.SplitSeq(string(raw), "\n") {
-		line = strings.TrimSpace(line)
-		
-		if after, ok := strings.CutPrefix(line, "module "); ok {
-			module := strings.TrimSpace(after)
-			module = strings.Trim(module, `"`)
-			if module == "" || strings.HasPrefix(module, "//") {
-				return "", errors.New("go.mod has an empty module directive")
-			}
-			return module, nil
-		}
-	}
-
-	return "", errors.New("go.mod is missing a module directive")
 }

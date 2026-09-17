@@ -6,13 +6,21 @@ import (
 	"sort"
 
 	"github.com/dougdomingos/test-prettify/internal/model"
+	"github.com/dougdomingos/test-prettify/internal/modutil"
 )
 
 // BuildReport converts the parsed test packages into the report source of
-// truth. Values that cannot be derived from `go test -json` (project name,
-// timestamp, coverage) are left for the caller to fill in.
-func BuildReport(packages map[string]*model.TestPackage) *model.ReportData {
+// truth. The project name is resolved from go.mod. Values that cannot be
+// derived from `go test -json` (timestamp, coverage) are left for the caller
+// to fill in.
+func BuildReport(packages map[string]*model.TestPackage) (*model.ReportData, error) {
+	projectName, err := modutil.ProjectName()
+	if err != nil {
+		return nil, fmt.Errorf("determining project name: %w", err)
+	}
+
 	data := &model.ReportData{
+		ProjectName: projectName,
 		Sidebar: model.SidebarData{
 			TestEntries:     make([]model.SidebarEntry, 0, len(packages)),
 			CoverageEntries: make([]model.SidebarEntry, 0),
@@ -85,7 +93,7 @@ func BuildReport(packages map[string]*model.TestPackage) *model.ReportData {
 	}
 	data.TestReport.Packages = pkgReports
 
-	return data
+	return data, nil
 }
 
 // ApplyCoverage merges a rendered coverage report into the shared report
